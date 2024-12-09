@@ -6,6 +6,7 @@ LOG_DATA = []
 LOG_CR = []
 LOG_BONUS = 0
 
+# Название файлов и также расценки на договора
 class data:
     name_98 = "98_OperatorAggregates.xml"
     dash = "dash.json"
@@ -33,6 +34,7 @@ class data:
         "59999.00":750,
         "69999.00":800
     }
+
 # Класс с основой системой подрузки данных + подсчёт
 class TruAR(data):
     username = getpass.getuser()
@@ -41,6 +43,7 @@ class TruAR(data):
         self.calc("volkovva")
         #self.calc(self.username)
         #self.get_datas("volkovva", "agreements")
+    # Открытие нужного отчёта и передача данных системе
     def _open_report(self, report):
         def find(file, path) -> bool:
             try:
@@ -72,6 +75,7 @@ class TruAR(data):
                 else:
                     os.system("""powershell -Command "& {[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('FileNotFound in path %s', 'TruAR', 'OK', 'Information')}""""" % ("C:\\Users\\%s\\Desktop\\Auto\\" % (self.username) + super().bonus))
                     os._exit(0)
+    # Парсинг данных из модуля _open_report
     def get_datas(self, get_group, report):
         global LOG_OPERATOR
         global LOG_DATA
@@ -114,6 +118,7 @@ class TruAR(data):
                 except AttributeError : print('Сотрудник: %s не найден в отчёте!\n-------' % (operator["name"]))
         print('Кол-во сотрудников в отчёте: %s' % (LOG_OPERATOR))
         del get_data, data, group, file_groups, data_group, search, operator
+    # Расчёт, загружает нужные файлы автоматом
     def calc(self, get_group):
         global LOG_OPERATOR
         global LOG_DATA
@@ -167,7 +172,7 @@ class TruAR(data):
                     if operator["name"] == LOG_DATA[0]:
                         LOG_BONUS = LOG_BONUS + super().FP[info.get("Тип_ФЗ2")] + super().TP[str(info.get("comis_gold_card2"))]
                     else:
-                        print("Премия сотрудник\n\tСотрудник: %s\n\tПремия: %s" % (LOG_DATA[0], LOG_BONUS))
+                        print("Премия сотрудник\n\tСотрудник: %s\n\tПремия: %s $" % (LOG_DATA[0], LOG_BONUS))
                         LOG_DATA.clear()
                         LOG_BONUS = 0
                 except AttributeError : pass
